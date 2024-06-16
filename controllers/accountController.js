@@ -3,9 +3,31 @@ import Account from '../models/account.js';
 
 export async function createAccount(req, res) {
   try {
-    const account = new Account({ ...req.body, userId: req.user.userId });
+
+      // Function to generate a random 10-digit number
+      const generateAccountNumber = async () => {
+        let isUnique = false;
+        let accountNumber;
+        
+        while (!isUnique) {
+          accountNumber = Math.floor(Math.random() * 9000000000) + 1000000000; // Generate a 10-digit number
+          const existingAccount = await Account.findOne({ accountNumber });
+          if (!existingAccount) {
+            isUnique = true;
+          }
+        }
+        
+        return accountNumber;
+      };
+  
+      // Generate unique account number
+      const accountNumber = await generateAccountNumber();
+
+    
+
+    const account = new Account({ ...req.body,accountNumber,  userId: req.user.userId });
     await account.save();
-    res.status(201).send('Account created');
+    res.status(201).send(`Account created with account number ${account.accountNumber}`);
   } catch (error) {
     res.status(400).send(error.message);
   }
