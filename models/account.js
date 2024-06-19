@@ -8,7 +8,7 @@ const accountSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   accountNumber: { type: String, required: true, unique: true },
   sortCode: { type: String, required: true },
-  status: { type: String, enum: ['ACTIVE', 'INACTIVE'], default: 'ACTIVE' },
+  activeStatusFlag: { type: Boolean, default: true },
   allowCredit: { type: Boolean, default: true },
   allowDebit: { type: Boolean, default: true },
   balance: { type: Number, default: 0 },
